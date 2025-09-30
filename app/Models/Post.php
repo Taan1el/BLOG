@@ -9,4 +9,10 @@ class Post extends Model
 {
     /** @use HasFactory<\Database\Factories\PostFactory> */
     use HasFactory;
+
+    protected function snippet(): Attribute {
+        return Attribute::get(function () {
+            return explode("/n/n", $this->body)[0];
+        });
+    }
 }
