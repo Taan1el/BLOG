@@ -16,7 +16,9 @@ class PublicController extends Controller
     }
 
     public function post(Post $post) {
-        return view('post', compact('post'));
+        if(request()->wantsJson()) {
+            return $post;
+        }
     }
 
     public function page1() {

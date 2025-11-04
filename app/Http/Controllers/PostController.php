@@ -17,8 +17,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->paginate();
-        return view('posts.index', compact('posts'));
+        $posts = Post::latest()->append('snippet')->paginate();
+        if(request()->wantsJson()) {
+            return $posts;
+        }
     }
 
     /**
