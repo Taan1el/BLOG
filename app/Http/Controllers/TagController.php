@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
-use App\Http\Requests\StoreTagRequest;
-use App\Http\Requests\UpdateTagRequest;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TagController extends Controller
 {
@@ -13,7 +13,11 @@ class TagController extends Controller
      */
     public function index()
     {
-        //
+        $tags = Tag::query()
+            ->orderBy('name')
+            ->paginate();
+
+        return $tags;
     }
 
     /**
@@ -27,9 +31,15 @@ class TagController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTagRequest $request)
+    public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255', 'min:1', 'unique:tags,name'],
+        ]);
+
+        $tag = Tag::create($validated);
+
+        return response()->json($tag, 201);
     }
 
     /**
@@ -37,7 +47,7 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        //
+        return $tag;
     }
 
     /**
@@ -51,9 +61,21 @@ class TagController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTagRequest $request, Tag $tag)
+    public function update(Request $request, Tag $tag)
     {
-        //
+        $validated = $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'min:1',
+                Rule::unique('tags', 'name')->ignore($tag->id),
+            ],
+        ]);
+
+        $tag->update($validated);
+
+        return $tag;
     }
 
     /**
@@ -61,6 +83,8 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        //
+        $tag->delete();
+
+        return response()->noContent();
     }
 }
