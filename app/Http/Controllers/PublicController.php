@@ -11,7 +11,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class PublicController extends Controller
 {
     public function index() {
-        $posts = Post::with('images', 'user', 'tags')->withCount('comments', 'likes')->latest()->simplePaginate(16);
+        $posts = Post::with('images', 'user', 'tags')
+            ->withCount('comments', 'likes')
+            ->latest()
+            ->paginate(16);
         return view('welcome', compact('posts'));
     }
 
@@ -30,11 +33,19 @@ class PublicController extends Controller
     }
 
     public function tag(Tag $tag) {
-        $posts = $tag->posts()->with('images', 'user', 'tags')->withCount('comments', 'likes')->latest()->simplePaginate(16);
+        $posts = $tag->posts()
+            ->with('images', 'user', 'tags')
+            ->withCount('comments', 'likes')
+            ->latest()
+            ->paginate(16);
         return view('welcome', compact('posts'));
     }
     public function category(Category $category) {
-        $posts = $category->posts()->with('images', 'user', 'tags')->withCount('comments', 'likes')->latest()->simplePaginate(16);
+        $posts = $category->posts()
+            ->with('images', 'user', 'tags')
+            ->withCount('comments', 'likes')
+            ->latest()
+            ->paginate(16);
         return view('welcome', compact('posts'));
     }
 }

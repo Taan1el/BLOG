@@ -1,6 +1,9 @@
 @extends('partials.layout')
 @section('title', 'Home page')
 @section('content')
+<div class="my-3">
+  {{ $posts->links() }}
+</div>
 @foreach($posts as $post)
 <div class="grid grid-cols-4 gap-2">
   <!-- <figure>
@@ -17,4 +20,7 @@
   </div>
 </div>
 @endforeach
+<div class="my-3">
+  {{ $posts->links() }}
+</div>
 @endsection
